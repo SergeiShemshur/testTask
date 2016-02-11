@@ -19,7 +19,7 @@ public class CalendarUtils {
         LocalDate tempDate;
 
         System.out.printf(COLOR_MONTH + "\n%21s\n" + COLOR_RESET, currentDate.getMonth());
-        printNameDayOfWeak();
+        printNameDayOfWeek();
         printIndent(currentDate);
 
         for (int i = 1; i <= currentDate.getMonth().length(currentDate.isLeapYear()); i++) {
@@ -35,7 +35,7 @@ public class CalendarUtils {
         }
     }
 
-    public static void printNameDayOfWeak() {
+    public static void printNameDayOfWeek() {
         DayOfWeek[] days = DayOfWeek.values();
         for (DayOfWeek day : days) {
             System.out.printf("%5s", day.getDisplayName(TextStyle.SHORT, Locale.UK));
