@@ -3,29 +3,27 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-public class Calendar {
+public class CalendarUtils {
 
-    public final String COLOR_RESET = "\u001B[0m";
-    public final String COLOR_WEEKEND = "\u001B[33m";
-    public final String COLOR_TODAY = "\u001B[36m";
-    public final String COLOR_WORKDAY = "\u001B[30m";
+    private static final String COLOR_RESET = "\u001B[0m";
+    private static final String COLOR_WEEKEND = "\u001B[33m";
+    private static final String COLOR_TODAY = "\u001B[36m";
+    private static final String COLOR_WORKDAY = "\u001B[30m";
+    private static final String COLOR_MONTH = "\u001B[35m";
 
-    public static void main(String[] args) {
-        Calendar c = new Calendar();
-        c.printMonth(LocalDate.now());
+    private CalendarUtils() {
     }
 
-    public void printMonth(LocalDate dateNow) {
-        int today = dateNow.getDayOfMonth();
-        boolean isLeapYear = dateNow.isLeapYear();
-
-        System.out.printf("\n%21s\n", dateNow.getMonth());
-        printNameDayOfWeak();
-        printIndent(dateNow);
-
+    public static void printMonth(LocalDate currentDate) {
+        int today = currentDate.getDayOfMonth();
         LocalDate tempDate;
-        for (int i = 1; i <= dateNow.getMonth().length(isLeapYear); i++) {
-            tempDate = dateNow.withDayOfMonth(i);
+
+        System.out.printf(COLOR_MONTH + "\n%21s\n" + COLOR_RESET, currentDate.getMonth());
+        printNameDayOfWeak();
+        printIndent(currentDate);
+
+        for (int i = 1; i <= currentDate.getMonth().length(currentDate.isLeapYear()); i++) {
+            tempDate = currentDate.withDayOfMonth(i);
             if (today == tempDate.getDayOfMonth()) {
                 printDay(COLOR_TODAY, tempDate);
             } else {
@@ -37,7 +35,7 @@ public class Calendar {
         }
     }
 
-    public void printNameDayOfWeak() {
+    public static void printNameDayOfWeak() {
         DayOfWeek[] days = DayOfWeek.values();
         for (DayOfWeek day : days) {
             System.out.printf("%5s", day.getDisplayName(TextStyle.SHORT, Locale.UK));
@@ -45,7 +43,7 @@ public class Calendar {
         System.out.println();
     }
 
-    private void printIndent(LocalDate dateNow) {
+    private static void printIndent(LocalDate dateNow) {
         LocalDate indent = dateNow.withDayOfMonth(1);
         if (!indent.getDayOfWeek().equals(DayOfWeek.MONDAY))
             while (!indent.getDayOfWeek().equals(DayOfWeek.MONDAY)) {
@@ -54,12 +52,12 @@ public class Calendar {
             }
     }
 
-    public boolean isWeekend(LocalDate localDate) {
+    public static boolean isWeekend(LocalDate localDate) {
         DayOfWeek day = localDate.getDayOfWeek();
         return (day.equals(DayOfWeek.SATURDAY) || day.equals(DayOfWeek.SUNDAY));
     }
 
-    private void printDay(String ansiColor, LocalDate localDate) {
+    private static void printDay(String ansiColor, LocalDate localDate) {
         System.out.printf(ansiColor + "%5d" + COLOR_RESET, localDate.getDayOfMonth());
         if (localDate.getDayOfWeek().equals(DayOfWeek.SUNDAY))
             System.out.println();
